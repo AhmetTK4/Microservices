@@ -11,17 +11,22 @@ public class OrderController {
 
     private final RabbitTemplate rabbitTemplate;
 
-
     public OrderController(RabbitTemplate rabbitTemplate) {
         this.rabbitTemplate = rabbitTemplate;
     }
 
     @PostMapping
     public String createOrder(@RequestBody OrderMessage orderMessage) {
-        rabbitTemplate.convertAndSend("order-exchange", "order.routing.key", orderMessage);
-        return "Order sent: " + orderMessage.getOrderId();
+        if ("WAITING".equalsIgnoreCase(orderMessage.getStatus())) {
+            rabbitTemplate.convertAndSend("order-exchange", "waiting.routing.key", orderMessage);
+            return "Order is waiting in the queue: " + orderMessage.getOrderId();
+        } else if ("SUCCESS".equalsIgnoreCase(orderMessage.getStatus())) {
+            rabbitTemplate.convertAndSend("order-exchange", "process.routing.key", orderMessage);
+            return "Order processed immediately: " + orderMessage.getOrderId();
+        } else {
+            return "Invalid status. Only WAITING or SUCCESS are allowed.";
+        }
     }
-
 
     @GetMapping("/")
     public String getOrders() {
