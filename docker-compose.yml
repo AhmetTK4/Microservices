@@ -27,3 +27,10 @@ services:
       - "8081:8081"
     depends_on:
       - rabbitmq
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:h2:mem:notificationdb;DB_CLOSE_DELAY=-1
+      SPRING_DATASOURCE_DRIVER-CLASS-NAME: org.h2.Driver
+      SPRING_DATASOURCE_USERNAME: sa
+      SPRING_DATASOURCE_PASSWORD: password
+      SPRING_H2_CONSOLE_ENABLED: "true"
+      SPRING_H2_CONSOLE_PATH: /h2-console
