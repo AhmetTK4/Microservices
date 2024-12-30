@@ -1,12 +1,17 @@
 package com.atk.orderservice.dto;
 
+import java.util.UUID;
+
 public class OrderMessage {
 
     private String orderId;
     private String customerName;
     private String status;
 
-    // Getters ve Setters
+    public OrderMessage() {
+        this.orderId = UUID.randomUUID().toString();
+    }
+
     public String getOrderId() {
         return orderId;
     }

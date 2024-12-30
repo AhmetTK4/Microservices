@@ -14,7 +14,8 @@ docker-compose up --build
 you can reach the rabbitmq console
 http://localhost:15672
 
-
+you can reach the h2 console
+http://localhost:8081/h2-console
 
 
 
