@@ -1,6 +1,7 @@
 package com.atk.orderservice.controller;
 
 import com.atk.orderservice.config.RabbitMQConfig;
+import com.atk.orderservice.dto.OrderMessage;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,10 +17,11 @@ public class OrderController {
     }
 
     @PostMapping
-    public String createOrder(@RequestParam String order) {
-        rabbitTemplate.convertAndSend(RabbitMQConfig.QUEUE_NAME, order);
-        return "Order sent: " + order;
+    public String createOrder(@RequestBody OrderMessage orderMessage) {
+        rabbitTemplate.convertAndSend("order-exchange", "order.routing.key", orderMessage);
+        return "Order sent: " + orderMessage.getOrderId();
     }
+
 
     @GetMapping("/")
     public String getOrders() {
